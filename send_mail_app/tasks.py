@@ -5,19 +5,41 @@ from django.core.mail import send_mail
 from learn_celery import settings
 
 @shared_task(bind=True)
-def send_mail_func(self):
-    users = get_user_model().objects.all()
+
+def send_emails_tasks(self,email, subject, message):
+    # import pdb
+    # pdb.set_trace()
+    users = email.split(",")
     for user in users:
-        mail_subject = "Hi! Celery Testing"
-        message = "If you are liking my content, please hit the like button and do subscribe to my channel"
-        # to_email = user.email
+        mail_subject = subject
+        message = message
+        to_email = user
         send_mail(
-            subject = mail_subject,
+            subject=mail_subject,
             message=message,
             from_email=settings.EMAIL_HOST_USER,
-            # recipient_list=[to_email],
-
-            recipient_list=['babyaishuu@gmail.com', 'aiswarya180@gmail.com', 'booklandz911@gmail.com'],
+            recipient_list=[to_email],
             fail_silently=True,
         )
     return "Done"
+
+
+
+# def send_mail_func(self):
+#     users = get_user_model().objects.all()
+#     for user in users:
+#         mail_subject = "Hi! Celery Testing"
+#         message = "If you are liking my content, please hit the like button and do subscribe to my channel"
+#         # to_email = user.email
+#         send_mail(
+#             subject = mail_subject,
+#             message=message,
+#             from_email=settings.EMAIL_HOST_USER,
+#             # recipient_list=[to_email],
+#
+#             recipient_list=['babyaishuu@gmail.com', 'aiswarya180@gmail.com', 'booklandz911@gmail.com'],
+#             fail_silently=True,
+#         )
+#     return "Done"
+#
+
